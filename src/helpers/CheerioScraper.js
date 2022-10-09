@@ -62,7 +62,6 @@ class BaseScraper {
       const html = await res.text()
       return cheerio.load(html)
     } catch (err) {
-      console.log("fetchDOM()")
       this.defaultError()
     }
   }
@@ -85,9 +84,7 @@ class BaseScraper {
 
   validateRecipe() {
     let res = validate(this.recipe, recipeSchema)
-    console.log(this.recipe)
     if (!res.valid) {
-      console.log("validateRecipe()")
       this.defaultError()
     }
     return this.recipe

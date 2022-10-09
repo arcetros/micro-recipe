@@ -9,6 +9,7 @@ const domains = {
 class ScraperFactory {
   getScraper(url) {
     let parse = parseDomain(url)
+    console.log(parse)
     if (parse) {
       let domain = parse.domain
       if (domains[domain] !== undefined) {
