@@ -18,5 +18,8 @@
     "node-fetch": "^2.6.6",
     "nodemon": "^2.0.20",
     "parse-domain": "^2.3.2"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
