@@ -84,6 +84,7 @@ class BaseScraper {
 
   validateRecipe() {
     let res = validate(this.recipe, recipeSchema)
+    console.log(this.recipe)
     if (!res.valid) {
       this.defaultError()
     }

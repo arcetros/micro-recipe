@@ -9,14 +9,34 @@ class MasakApaHariIni extends BaseScraper {
     this.defaultSetImage($)
     this.defaultSetDescription($)
 
-    const { ingredients, instructions, time } = this.recipe
     const elementHeader = $("#recipe-header")
     const elementIngredients = $("#ingredients-section")
     const elementInstructions = $("#steps-section")
+    const elementTags = $("#share-and-tags")
 
     this.recipe.name = elementHeader.find(".title").text()
 
-    let ingredientsArr = []
+    elementHeader.find(".recipe-info").each((_, el) => {
+      let totalduration = $(el).find(".time").find("small").text()
+      let servings = $(el).find(".servings").find("small").text()
+
+      let servingsArr = []
+
+      if (totalduration.includes("\n") && servings.includes("\n")) {
+        const parsedDuration = totalduration.split("\n")[1].split(" ")
+        parsedDuration.forEach((r) => {
+          if (r !== "") totalduration = r
+        })
+
+        const parsedServings = servings.split("\n")[1].split(" ")
+        parsedServings.forEach((r) => {
+          if (r !== "") servings = servingsArr.push(r)
+        })
+      }
+
+      this.recipe.time.total = totalduration
+      this.recipe.servings = Array.from(servingsArr).join(" ")[0]
+    })
 
     elementIngredients
       .find(".ingredient-groups")
@@ -24,33 +44,31 @@ class MasakApaHariIni extends BaseScraper {
       .find(".ingredient-item")
       .each((_, el) => {
         let term = []
-        let quantity, ingredient, ingredients, metaIngredient, parseIngredient
 
-        quantity = $(el).find(".quantity").text()
-        metaIngredient = $(el).find(".ingredient").text()
-        parseIngredient = metaIngredient.split("\n")[1].split(" ")
+        const quantity = $(el).find(".quantity").text()
+        const metaIngredient = $(el).find(".ingredient").text()
+        const parseIngredient = metaIngredient.split("\n")[1].split(" ")
         parseIngredient.forEach((r) => {
           if (r !== "") term.push(r)
         })
 
-        ingredient = Array.from(term).join(" ")
-        ingredients = `${quantity} ${ingredient}`
-        ingredientsArr.push(ingredients)
+        let ingredient = Array.from(term).join(" ")
+        this.recipe.ingredients.push(`${quantity} ${ingredient}`)
       })
 
-    this.recipe.ingredients = ingredientsArr
-
-    let step, resultStep
-    let stepArr = []
     elementInstructions
       .find(".steps")
       .find(".step")
       .each((_, el) => {
-        step = $(el).find(".step-description").find("p").text()
-        resultStep = step
-        stepArr.push(resultStep)
+        this.recipe.instructions.push(
+          $(el).find(".step-description").find("p").text()
+        )
       })
-    this.recipe.instructions = stepArr
+
+    elementTags.find(".post-tags a").each((i, el) => {
+      let tag = $(el).text()
+      this.recipe.tags.push(tag)
+    })
   }
 }
 

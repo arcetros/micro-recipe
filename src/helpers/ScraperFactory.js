@@ -3,13 +3,11 @@ const parseDomain = require("parse-domain")
 
 const domains = {
   masakapahariini: require("../scrapers/MasakApaHariIni"),
-  "101cookbook": require("../scrapers/101CookBook"),
 }
 
-class ScraperFactory {
-  getScraper(url) {
+const ScraperFactory = {
+  getScraper: (url) => {
     let parse = parseDomain(url)
-    console.log(parse)
     if (parse) {
       let domain = parse.domain
       if (domains[domain] !== undefined) {
@@ -20,7 +18,7 @@ class ScraperFactory {
     } else {
       throw new Error("Failed to parse domain")
     }
-  }
+  },
 }
 
 module.exports = ScraperFactory

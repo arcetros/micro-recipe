@@ -1,9 +1,9 @@
 "use strict"
 
-const ScraperFactory = require("../helpers/ScraperFactory")
+const { getScraper } = require("../helpers/ScraperFactory")
 
 const recipeScraper = async (url) => {
-  let recipe = new ScraperFactory().getScraper(url)
+  let recipe = getScraper(url)
   return await recipe.fetchRecipe(url)
 }
 
