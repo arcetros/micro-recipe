@@ -11,14 +11,13 @@ route.get("/", (_, res) => {
   })
 })
 
-route.get("/api/*", async (req, res) => {
-  await recipeScraper(req.params[0])
-    .then((recipe) => {
-      res.send({ recipe })
-    })
-    .catch((err) => {
-      res.send({ message: err.message })
-    })
+route.get("/api/search/", async (req, res) => {
+  try {
+    const recipe = await recipeScraper(req.query.q)
+    res.send({ results: recipe })
+  } catch (err) {
+    res.send({ message: err.message })
+  }
 })
 
 route.get("*", (req, res) => {
