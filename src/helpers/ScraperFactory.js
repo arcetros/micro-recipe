@@ -3,6 +3,8 @@ const parseDomain = require("parse-domain")
 
 const domains = {
   masakapahariini: require("../scrapers/MasakApaHariIni"),
+  stryve: require("../scrapers/Stryve"),
+  // cookpad: require("../scrapers/Cookpad"),
 }
 
 const ScraperFactory = {

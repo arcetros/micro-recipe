@@ -15,7 +15,7 @@ function Recipe() {
   this.servings = "" || "1"
   this.author = {
     name: "",
-    created_at: "",
+    created_at: "" || undefined,
   }
   this.image = "" || undefined
 }

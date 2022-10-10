@@ -2,6 +2,7 @@
 
 const puppeteer = require("puppeteer")
 const cheerio = require("cheerio")
+const userAgent = require("user-agents")
 
 const blockedResourceTypes = [
   "image",
@@ -50,30 +51,38 @@ class PuppeteerScraper extends BaseScraper {
       headless: true,
     })
     const page = await browser.newPage()
+    await page.setUserAgent(userAgent.random().toString())
     await page.setRequestInterception(true)
 
-    await page.on("request", (req) => {
-      const requestUrl = req._url.split("?")[0].split("#")[0]
+    page.on("request", (interceptedRequest) => {
+      const requestUrl = interceptedRequest.url().split("?")[0].split("#")[0]
       if (
-        blockedResourceTypes.indexOf(req.resourceType()) !== -1 ||
+        blockedResourceTypes.indexOf(interceptedRequest.resourceType()) !==
+          -1 ||
         skippedResources.some((resource) => requestUrl.indexOf(resource) !== -1)
       ) {
-        req.abort()
+        interceptedRequest.abort()
       } else {
-        req.continue()
+        interceptedRequest.continue()
       }
     })
+
+    page.on("error", (err) => {
+      let theEmpValue = err.toString()
+    })
+
+    page.on("console", (msg) => console.log("PAGE LOG:", msg.text()))
 
     const response = await page.goto(this.url)
 
     let html
-    if (response._status < 400) {
+    if (response.status < 400) {
       await this.customPoll(page)
       html = await page.content()
     }
-    browser.close().catch((err) => {})
+    browser.close().catch((err) => console.log({ err }))
 
-    if (response._status >= 400) {
+    if (response.status >= 400) {
       this.defaultError()
     }
     return cheerio.load(html)
