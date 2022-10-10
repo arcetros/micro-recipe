@@ -21,4 +21,4 @@ const ScraperFactory = {
   },
 }
 
-module.exports = ScraperFactory
+module.exports = { ScraperFactory, domains }

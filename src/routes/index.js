@@ -1,4 +1,5 @@
 const router = require("express").Router()
+const domains = require("../helpers/ScraperFactory").domains
 const recipeScraper = require("../scrapers/index")
 
 const route = router
@@ -14,10 +15,19 @@ route.get("/", (_, res) => {
 route.get("/api/search/", async (req, res) => {
   try {
     const recipe = await recipeScraper(req.query.q)
-    res.send({ results: recipe })
+    res.send({
+      method: req.method,
+      status: true,
+      message: "success",
+      results: recipe,
+    })
   } catch (err) {
-    res.send({ message: err.message })
+    res.send({ method: req.method, status: false, message: err.message })
   }
+})
+
+route.get("/api/domains", (_, res) => {
+  res.status(200).send({ domains: Object.keys(domains).map((item) => item) })
 })
 
 route.get("*", (req, res) => {
