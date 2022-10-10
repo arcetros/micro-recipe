@@ -17,7 +17,8 @@
     "jsonschema": "^1.4.1",
     "node-fetch": "^2.6.6",
     "nodemon": "^2.0.20",
-    "parse-domain": "^2.3.2"
+    "parse-domain": "^2.3.2",
+    "puppeteer": "^18.2.1"
   },
   "engines": {
     "node": "16.x"
