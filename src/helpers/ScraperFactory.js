@@ -4,6 +4,7 @@ const parseDomain = require("parse-domain")
 const domains = {
   masakapahariini: require("../scrapers/MasakApaHariIni"),
   stryve: require("../scrapers/Stryve"),
+  yummly: require("../scrapers/Yummly"),
   // cookpad: require("../scrapers/Cookpad"),
 }
 

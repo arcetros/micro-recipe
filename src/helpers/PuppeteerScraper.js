@@ -52,42 +52,17 @@ class PuppeteerScraper extends BaseScraper {
     })
     const page = await browser.newPage()
     await page.setUserAgent(userAgent.random().toString())
-    await page.setRequestInterception(true)
-
-    page.on("request", (interceptedRequest) => {
-      const requestUrl = interceptedRequest.url().split("?")[0].split("#")[0]
-      if (
-        blockedResourceTypes.indexOf(interceptedRequest.resourceType()) !==
-          -1 ||
-        skippedResources.some((resource) => requestUrl.indexOf(resource) !== -1)
-      ) {
-        interceptedRequest.abort()
-      } else {
-        interceptedRequest.continue()
-      }
-    })
-
-    page.on("error", (err) => {
-      let theEmpValue = err.toString()
-    })
-
-    page.on("console", (msg) => console.log("PAGE LOG:", msg.text()))
-
     const response = await page.goto(this.url)
 
-    let html
-    if (response.status < 400) {
-      await this.customPoll(page)
-      html = await page.content()
-    }
-    browser.close().catch((err) => console.log({ err }))
+    this.customPoll(page)
+    let html = await page.content()
 
-    if (response.status >= 400) {
+    if (response.status() >= 400) {
       this.defaultError()
     }
+
     return cheerio.load(html)
   }
-
   static async isElementVisible(page, cssSelector) {
     let visible = true
     await page
