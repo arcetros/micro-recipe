@@ -40,8 +40,13 @@
         "total": { "type": "string" }
       }
     },
-    "servings": {
-      "type": { "type": "string" }
+    "servings": { "type": "string" },
+    "author": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "created_at": { "type": "string" }
+      }
     },
     "image": { "type": "string" }
   }

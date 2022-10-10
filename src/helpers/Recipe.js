@@ -5,15 +5,19 @@ function Recipe() {
   this.instructions = []
   this.tags = []
   this.time = {
-    prep: "",
-    cook: "",
-    active: "",
-    inactive: "",
-    ready: "",
-    total: "",
+    prep: "" || undefined,
+    cook: "" || undefined,
+    active: "" || undefined,
+    inactive: "" || undefined,
+    ready: "" || undefined,
+    total: "" || undefined,
   }
-  this.servings = ""
-  this.image = ""
+  this.servings = "" || "1"
+  this.author = {
+    name: "",
+    created_at: "",
+  }
+  this.image = "" || undefined
 }
 
 module.exports = Recipe

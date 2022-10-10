@@ -15,6 +15,10 @@ class MasakApaHariIni extends BaseScraper {
     const elementTags = $("#share-and-tags")
 
     this.recipe.name = elementHeader.find(".title").text()
+    this.recipe.author.name = elementHeader.find(".author").text()
+    this.recipe.author.created_at = new Date(
+      elementHeader.find(".date").text()
+    ).toLocaleDateString()
 
     elementHeader.find(".recipe-info").each((_, el) => {
       let totalduration = $(el).find(".time").find("small").text()
