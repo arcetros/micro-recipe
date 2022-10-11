@@ -6,42 +6,29 @@ class Yummly extends PuppeteerScraper {
   constructor(url) {
     super(url, "yummly.com/recipe")
   }
-  async customPoll(page) {
-    try {
-      const selectorForLoadMoreButton = "a.view-more-steps"
-
-      let loadMoreVisible = await PuppeteerScraper.isElementVisible(
-        page,
-        selectorForLoadMoreButton
-      )
-      while (loadMoreVisible) {
-        await page.click(selectorForLoadMoreButton).catch(() => {})
-        loadMoreVisible = await PuppeteerScraper.isElementVisible(
-          page,
-          selectorForLoadMoreButton
-        )
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  }
 
   scrape($) {
     this.defaultSetImage($)
     this.recipe.description = $("meta[name='description']").attr("content")
-    const { ingredients, instructions, tags, time } = this.recipe
+    const { ingredients, author, tags, time } = this.recipe
     this.recipe.name = $(".recipe-title").text()
 
     $(".recipe-tag").each((i, el) => {
       tags.push($(el).find("a").text())
     })
 
+    const data = JSON.parse(
+      $("script[type='application/ld+json']")[1].children[0].data
+    )
+
+    this.recipe.instructions = data.itemListElement[0].recipeInstructions.map(
+      (item) => item.text
+    )
+
+    author.name = data.itemListElement[0].author.name
+
     $(".IngredientLine").each((i, el) => {
       ingredients.push($(el).text())
-    })
-
-    $(".step").each((i, el) => {
-      instructions.push($(el).text())
     })
 
     time.total =
