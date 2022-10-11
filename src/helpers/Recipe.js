@@ -1,20 +1,20 @@
 function Recipe() {
   this.name = ""
-  this.description = ""
+  this.description = "" || undefined
   this.ingredients = []
   this.instructions = []
   this.tags = []
-  this.time = {
-    prep: "" || undefined,
-    cook: "" || undefined,
-    active: "" || undefined,
-    inactive: "" || undefined,
-    ready: "" || undefined,
-    total: "" || undefined,
-  }
+  // this.time = {
+  //   prep: "" || undefined,
+  //   cook: "" || undefined,
+  //   active: "" || undefined,
+  //   inactive: "" || undefined,
+  //   ready: "" || undefined,
+  //   total: "" || undefined,
+  // }
   this.servings = "" || "1"
   this.author = {
-    name: "",
+    name: "" || undefined,
     created_at: "" || undefined,
   }
   this.image = "" || undefined
