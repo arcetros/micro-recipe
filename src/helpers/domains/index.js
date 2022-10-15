@@ -1,4 +1,4 @@
-const domains = ["masakapahariini", "stryve"]
+const domains = ["stryve"]
 
 const selectors = {
   stryve: {

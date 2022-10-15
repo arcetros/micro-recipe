@@ -1,6 +1,6 @@
 const router = require("express").Router()
 const { domains } = require("../helpers/domains")
-const { getResponse } = require("../helpers/BaseScraper")
+const getResponse = require("../helpers/BaseScraper").getResponse
 
 const route = router
 
@@ -22,7 +22,11 @@ route.get("/api/search/", async (req, res) => {
       results: recipe,
     })
   } catch (err) {
-    res.send({ method: req.method, status: false, message: err.message })
+    const error =
+      err.response?.status > 400
+        ? "Site not yet supported or forbidden to access this domain"
+        : err.message
+    res.send({ method: req.method, status: false, message: error })
   }
 })
 
