@@ -129,18 +129,6 @@ function getResponseAlt(html) {
                       text: decodeHTML(html, instructionStep.text),
                       image: instructionStep.image || "",
                     })
-                  } else if (instructionStep["@type"] === "HowToSection") {
-                    if (instructionStep.itemListElement) {
-                      instructionStep.itemListElement.forEach((step) => {
-                        _recipe.instructions.push(decodeHTML(html, step.text))
-
-                        _recipe.sectionedInstructions.push({
-                          sectionTitle: instructionStep.name,
-                          text: decodeHTML(html, step.text),
-                          image: step.image || "",
-                        })
-                      })
-                    }
                   } else if (typeof instructionStep === "string") {
                     _recipe.instructions.push(decodeHTML(html, instructionStep))
                   } else if (typeof recipe.recipeInstructions === "string") {
@@ -148,27 +136,27 @@ function getResponseAlt(html) {
                       decodeHTML(html, recipe.recipeInstructions),
                     ]
                   }
-
-                  if (recipe.prepTime) {
-                    _recipe.time.prep = parsePTTime(recipe.prepTime)
-                  }
-
-                  if (recipe.cookTime) {
-                    _recipe.time.cook = parsePTTime(recipe.cookTime)
-                  }
-
-                  if (recipe.totalTime) {
-                    _recipe.time.total = parsePTTime(recipe.totalTime)
-                  }
-
-                  if (Array.isArray(recipe.recipeYield)) {
-                    _recipe.servings = recipe.recipeYield[0]
-                  } else if (typeof recipe.recipeYield === "string") {
-                    _recipe.servings = recipe.recipeYield
-                  }
                 })
               }
-              _recipe.author.name = recipe.author.name
+              if (recipe.prepTime) {
+                _recipe.time.prep = parsePTTime(recipe.prepTime)
+              }
+
+              if (recipe.cookTime) {
+                _recipe.time.cook = parsePTTime(recipe.cookTime)
+              }
+
+              if (recipe.totalTime) {
+                _recipe.time.total = parsePTTime(recipe.totalTime)
+              }
+
+              if (Array.isArray(recipe.recipeYield)) {
+                _recipe.servings = recipe.recipeYield[0]
+              } else if (typeof recipe.recipeYield === "string") {
+                _recipe.servings = recipe.recipeYield
+              }
+              _recipe.servings = recipe.recipeYield.toString()
+              _recipe.author.name = recipe.author.name || recipe.author[0].name
             } catch (err) {
               throw new Error("Site is not yet supported")
             }
