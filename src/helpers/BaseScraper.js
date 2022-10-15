@@ -1,28 +1,35 @@
 const axios = require("axios")
 const cheerio = require("cheerio")
-const { validate } = require("jsonschema")
 const parseDomain = require("parse-domain")
 const Recipe = require("../helpers/Recipe")
+const getResponseAlt = require("./AlternativeScraper")
+const validateRecipe = require("./validateRecipe")
 
-const recipeSchema = require("./RecipeSchema.json")
 const { domains: supportedDomains, selectors } = require("./domains")
 
-function isSupported(domain) {
+function isDomainSupported(domain) {
   return supportedDomains.find((d) => d === domain) !== undefined
 }
 
 async function getResponse(url) {
   const _axios = axios.create()
   const parse = parseDomain(url)
+  let isSupported
+
   if (parse) {
     let domain = parse.domain
-    if (isSupported(domain)) {
+    if (isDomainSupported(domain)) {
+      isSupported = true
       return _axios.get(url).then((response) => {
         const html = response.data
-        return getRecipeData(domain, html)
+        return { isSupported, recipe: getRecipeData(domain, html) }
       })
     } else {
-      throw new Error("Site not yet supported")
+      isSupported = false
+      return _axios.get(url).then((response) => {
+        const html = response.data
+        return { isSupported, recipe: getResponseAlt(html) }
+      })
     }
   } else {
     throw new Error("Failed to parse domain")
@@ -99,16 +106,8 @@ function getDirectionsFromSelector(html, selector) {
   return directions
 }
 
-function validateRecipe(recipe) {
-  const res = validate(recipe, recipeSchema)
-  if (!res.valid) {
-    defaultError()
-  }
-  return recipe
+module.exports = {
+  getResponse,
+  getDescriptionFromSelector,
+  getImageFromSelector,
 }
-
-function defaultError() {
-  throw new Error("No recipe found page")
-}
-
-module.exports = { getResponse }
