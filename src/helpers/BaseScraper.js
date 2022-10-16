@@ -14,21 +14,18 @@ function isDomainSupported(domain) {
 async function getResponse(url) {
   const _axios = axios.create()
   const parse = parseDomain(url)
-  let isSupported
 
   if (parse) {
     let domain = parse.domain
     if (isDomainSupported(domain)) {
-      isSupported = true
       return _axios.get(url).then((response) => {
         const html = response.data
-        return { isSupported, recipe: getRecipeData(domain, html) }
+        return getRecipeData(domain, html)
       })
     } else {
-      isSupported = false
       return _axios.get(url).then((response) => {
         const html = response.data
-        return { isSupported, recipe: getResponseAlt(html) }
+        return getResponseAlt(html)
       })
     }
   } else {
@@ -46,6 +43,7 @@ function getRecipeData(domain, html) {
     _ingredientName,
     directionsSelector,
     authorSelector,
+    servingsSelector,
   } = selectors[domain]
 
   recipe.name = $(titleSelector).text().trim()
@@ -57,7 +55,8 @@ function getRecipeData(domain, html) {
     _ingredientQty,
   })
   recipe.instructions = getDirectionsFromSelector(html, directionsSelector)
-  recipe.author.name = $(authorSelector).attr("content") || undefined
+  recipe.servings = $(servingsSelector).text()
+  recipe.author = $(authorSelector).attr("content") || undefined
 
   return validateRecipe(recipe)
 }

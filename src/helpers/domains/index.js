@@ -1,4 +1,4 @@
-const domains = ["stryve"]
+const domains = ["stryve", "dapurumami"]
 
 const selectors = {
   stryve: {
@@ -8,6 +8,12 @@ const selectors = {
     _ingredientName: ".Ingredient_name__ZXffJ",
     directionsSelector: "ol > li p",
     authorSelector: "meta[name='twitter:creator']",
+  },
+  dapurumami: {
+    titleSelector: "h1.title",
+    ingredientSelector: ".bahanResep > div > div",
+    directionsSelector: ".steps > .step p",
+    servingsSelector: ".textPorsi > strong",
   },
 }
 

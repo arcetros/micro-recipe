@@ -75,19 +75,6 @@ function getResponseAlt(html) {
                 BaseScraper.getImageFromSelector(html)
               }
 
-              if (recipe.recipeCategory) {
-                if (typeof recipe.recipeCategory === "string") {
-                  _recipe.tags.push(recipe.recipeCategory)
-                } else if (Array.isArray(recipe.recipeCategory)) {
-                  _recipe.tags = [
-                    ...new Set([..._recipe.tags, ...recipe.recipeCategory]),
-                  ]
-                }
-              }
-
-              _recipe.tags = _recipe.tags.map((i) => decodeHTML(html, i))
-              _recipe.tags = [...new Set(_recipe.tags)]
-
               if (Array.isArray(recipe.recipeIngredient)) {
                 _recipe.ingredients = recipe.recipeIngredient.map((i) =>
                   decodeHTML(html, i)
@@ -124,11 +111,6 @@ function getResponseAlt(html) {
                     _recipe.instructions.push(
                       decodeHTML(html, instructionStep.text)
                     )
-                    _recipe.sectionedInstructions.push({
-                      sectionTitle: instructionStep.name || "",
-                      text: decodeHTML(html, instructionStep.text),
-                      image: instructionStep.image || "",
-                    })
                   } else if (typeof instructionStep === "string") {
                     _recipe.instructions.push(decodeHTML(html, instructionStep))
                   } else if (typeof recipe.recipeInstructions === "string") {
@@ -156,7 +138,7 @@ function getResponseAlt(html) {
                 _recipe.servings = recipe.recipeYield
               }
               _recipe.servings = recipe.recipeYield.toString()
-              _recipe.author.name = recipe.author.name || recipe.author[0].name
+              _recipe.author = recipe.author || recipe.author
             } catch (err) {
               throw new Error("Site is not yet supported")
             }
