@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const { domains } = require("../helpers/domains")
+const { domains } = require("../helpers/selectors/index")
 const getResponse = require("../helpers/BaseScraper").getResponse
 
 const route = router

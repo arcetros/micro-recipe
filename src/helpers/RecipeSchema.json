@@ -39,13 +39,7 @@
       }
     },
     "servings": { "type": "string" },
-    "author": {
-      "type": "object",
-      "properties": {
-        "name": { "type": "string" },
-        "created_at": { "type": "string" }
-      }
-    },
+    "author": { "type": "string" },
     "image": { "type": "string" }
   }
 }

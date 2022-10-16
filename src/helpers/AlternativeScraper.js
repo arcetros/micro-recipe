@@ -1,5 +1,8 @@
 const cheerio = require("cheerio")
-const BaseScraper = require("./BaseScraper")
+const {
+  getDescriptionFromSelector,
+  getImageFromSelector,
+} = require("./selectors/index")
 const Recipe = require("./Recipe")
 const parsePTTime = require("./parsePTTime")
 const validateRecipe = require("./validateRecipe")
@@ -55,7 +58,7 @@ function getResponseAlt(html) {
               if (recipe.description) {
                 _recipe.description = decodeHTML(html, recipe.description)
               } else {
-                BaseScraper.getDescriptionFromSelector(html)
+                getDescriptionFromSelector(html)
               }
 
               if (Array.isArray(recipe.image)) {
@@ -72,7 +75,7 @@ function getResponseAlt(html) {
                   _recipe.image = recipe.image
                 }
               } else {
-                BaseScraper.getImageFromSelector(html)
+                getImageFromSelector(html)
               }
 
               if (Array.isArray(recipe.recipeIngredient)) {
@@ -138,7 +141,7 @@ function getResponseAlt(html) {
                 _recipe.servings = recipe.recipeYield
               }
               _recipe.servings = recipe.recipeYield.toString()
-              _recipe.author = recipe.author || recipe.author
+              _recipe.author = recipe.author.name
             } catch (err) {
               throw new Error("Site is not yet supported")
             }
