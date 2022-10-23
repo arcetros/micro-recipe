@@ -11,6 +11,7 @@ function Recipe() {
     ready: "" || undefined,
     total: "" || undefined,
   }
+  this.nutritions = undefined
   this.servings = "" || "1"
   this.author = "" || undefined
   this.image = "" || undefined

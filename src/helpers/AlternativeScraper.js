@@ -53,6 +53,7 @@ function getResponseAlt(html) {
             }
 
             if (recipe) {
+              console.log(recipe.nutrition)
               try {
                 _recipe.name = decodeHTML(html, recipe.name)
 
@@ -121,6 +122,12 @@ function getResponseAlt(html) {
                     }
                   })
                 }
+
+                if (recipe.nutrition) {
+                  _recipe.nutritions = recipe.nutrition
+                  delete recipe.nutrition["@type"]
+                }
+
                 if (recipe.prepTime) {
                   _recipe.time.prep = parsePTTime(recipe.prepTime)
                 }

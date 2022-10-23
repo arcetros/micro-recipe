@@ -52,6 +52,7 @@ const selectors = {
     ingredientSelector: ".bahanResep > div > div",
     directionsSelector: ".steps > .step p",
     servingsSelector: ".textPorsi > strong",
+    // nutritionSelector: ".resepDiv > .info",
   },
 }
 
